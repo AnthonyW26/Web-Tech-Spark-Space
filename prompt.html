@@ -35,20 +35,22 @@
         </button>
       </div>
       <div class="button">
-            <a href="reference.html" class="prompt-btn">
-                <span>Next Stop!</span>
-            </a>
-        </div>
+        <a href="reference.html" class="prompt-btn">
+          <span>Next Stop!</span>
+        </a>
+      </div>
       <div class="feedback" id="PromptFeedback"></div>
     </div>
 
     <script>
       function generateStars() {
         const starsContainer = document.getElementById("starsContainer");
+        // how many stars I want based on wdith of browser window
         const starCount = Math.floor(window.innerWidth / 20);
         for (let i = 0; i < starCount; i++) {
           const star = document.createElement("div");
           star.className = "star";
+          // random size and position for each star
           star.style.width = Math.random() * 3 + "px";
           star.style.height = star.style.width;
           star.style.left = Math.random() * 100 + "%";
@@ -64,7 +66,7 @@
         generateStars();
       });
 
-      const fallbackPrompts = [
+      const objects = [
         "Bicycle",
         "Umbrella",
         "Candle",
@@ -79,33 +81,35 @@
         "Hat",
         "Lamp",
         "Plant",
+        "Watch",
+        "Backpack",
+        "Headphones",
+        "Mug",
+        "Wallet",
+        "Key",
+        "Phone",
+        "Table",
+        "Pen",
+        "Notebook"
       ];
+
       const display = document.getElementById("PromptDisplay");
       const feedback = document.getElementById("PromptFeedback");
       const newBtn = document.getElementById("newPromptBtn");
       const copyBtn = document.getElementById("copyPromptBtn");
 
-      async function fetchPrompts() {
-        try {
-          const res = await fetch("https://roger.redevised.com/api/v1");
-          if (!res.ok) throw new Error("API error");
-          const data = await res.json();
-        } catch {
-          const random =
-            fallbackPrompts[Math.floor(Math.random() * fallbackPrompts.length)];
-          display.textContent = random;
-        }
+      function showRandomObject() {
+        const random = objects[Math.floor(Math.random() * objects.length)];
+        display.textContent = random;
       }
 
-      newBtn.addEventListener("click", fetchPrompts);
+      newBtn.addEventListener("click", showRandomObject);
+
       copyBtn.addEventListener("click", () => {
-        if (
-          !display.textContent ||
-          display.textContent === "Loading..." ||
-          display.textContent === "Click on the button below to begin!"
-        )
-          return;
-        navigator.clipboard.writeText(display.textContent).then(() => {
+        const text = display.textContent;
+        if (!text || text === "Click on the button below to begin!") return;
+
+        navigator.clipboard.writeText(text).then(() => {
           feedback.textContent = "Copied!";
           setTimeout(() => (feedback.textContent = ""), 1200);
         });

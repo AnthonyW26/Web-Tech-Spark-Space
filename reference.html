@@ -28,20 +28,22 @@
       <div class="actions">
         <button class="prompt-btn" id="newImageBtn">Give Me an Image</button>
       </div>
-       <div class="button">
-            <a href="palette.html" class="prompt-btn">
-                <span>Next Stop!</span>
-            </a>
-        </div>
+      <div class="button">
+        <a href="palette.html" class="prompt-btn">
+          <span>Next Stop!</span>
+        </a>
+      </div>
       <div class="feedback" id="referenceFeedback"></div>
 
       <script>
         function generateStars() {
           const starsContainer = document.getElementById("starsContainer");
+          // how many stars I want based on wdith of browser window
           const starCount = Math.floor(window.innerWidth / 20);
           for (let i = 0; i < starCount; i++) {
             const star = document.createElement("div");
             star.className = "star";
+            // random size and position for each star
             star.style.width = Math.random() * 3 + "px";
             star.style.height = star.style.width;
             star.style.left = Math.random() * 100 + "%";

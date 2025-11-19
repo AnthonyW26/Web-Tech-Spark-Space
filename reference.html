@@ -38,7 +38,7 @@
       <script>
         function generateStars() {
           const starsContainer = document.getElementById("starsContainer");
-          // how many stars I want based on wdith of browser window
+          // how many stars based on wdith of browser window
           const starCount = Math.floor(window.innerWidth / 20);
           for (let i = 0; i < starCount; i++) {
             const star = document.createElement("div");
@@ -70,39 +70,35 @@
             display.textContent = "Loading...";
           }
         }
-
+        window.UNSPLASH_CLIENT_ID = "your_actual_unsplash_client_id_here"; // replace this part with the access code would make it work
+        // API to fetch random image from Unsplash
         async function loadRandomImage() {
           setLoading(true);
           try {
-            const url =
-              "https://source.unsplash.com/random/1200x800?sig=" + Date.now();
-            const img = document.createElement("img");
-            img.crossOrigin = "anonymous";
-            img.alt = "Reference image";
+            // Assume UNSPLASH_CLIENT_ID is injected at build/runtime (e.g., via a bundler or server template)
+            const clientId = window.UNSPLASH_CLIENT_ID || "YOUR_CLIENT_ID_HERE";
+            const apiUrl = `https://api.unsplash.com/photos/random?client_id=${clientId}`;
+            console.log("Fetching from:", apiUrl);
+            const res = await fetch(apiUrl);
+            if (!res.ok) throw new Error("API error");
+            const data = await res.json();
+            const img = new Image();
+            img.src = data.urls && data.urls.regular ? data.urls.regular : data.urls.full;
+            img.alt = data.alt_description || "Random reference";
             img.style.maxWidth = "100%";
             img.style.borderRadius = "8px";
-
-            await new Promise((resolve, reject) => {
-              img.onload = () => resolve();
-              img.onerror = () => reject(new Error("Image failed to load"));
-            });
-
-            img.src = url;
+            await img.decode();
             display.innerHTML = "";
             display.appendChild(img);
             feedback.textContent = "";
           } catch (err) {
-            display.innerHTML =
-              '<div style="padding: 40px; text-align: center; color: #999;">Failed to load image.</div>';
-            feedback.textContent = "Could not fetch image. Try again.";
+            display.innerHTML = '<div style="padding: 40px; text-align: center; color: #999;">Failed to load image.</div>';
+            feedback.textContent = "Could not fetch image.";
           } finally {
             setLoading(false);
           }
         }
-
-        newBtn.addEventListener("click", () => {
-          loadRandomImage();
-        });
+        newBtn.addEventListener("click", loadRandomImage);
       </script>
     </div>
   </body>

@@ -51,7 +51,7 @@
     <script>
       function generateStars() {
         const starsContainer = document.getElementById("starsContainer");
-        // how many stars I want based on wdith of browser window
+        // how many stars based on wdith of browser window
         const starCount = Math.floor(window.innerWidth / 20);
         for (let i = 0; i < starCount; i++) {
           const star = document.createElement("div");
@@ -132,6 +132,7 @@
         });
       }
 
+      // API to fetch color palette 
       async function loadPalette() {
         setLoading(true);
 
@@ -153,10 +154,7 @@
           const data = await response.json();
 
           let palette = data.result.map((rgb) => {
-            const hex =
-              "#" +
-              rgb
-                .map((x) => {
+            const hex = "#" + rgb.map((x) => {
                   const h = x.toString(16);
                   return h.length === 1 ? "0" + h : h;
                 })
